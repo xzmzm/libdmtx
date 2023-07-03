@@ -1,17 +1,17 @@
 cmake_minimum_required(VERSION 3.0)
-project(DMTX VERSION 0.7.7 LANGUAGES C)
+project(DMTX VERSION 0.7.7 LANGUAGES C CXX)
 
 # DMTX library
 option(DMTX_SHARED "Build DMTX as shared library" ${BUILD_SHARED_LIBS})
 if(DMTX_SHARED)
-  add_library(dmtx SHARED "dmtx.c")
+  add_library(dmtx SHARED dmtx.c libdmtx.cpp)
 else()
-  add_library(dmtx STATIC "dmtx.c")
+  add_library(dmtx STATIC dmtx.c libdmtx.cpp)
 endif()
 
 # Compiler specific settings
 if (MSVC)
-  set_target_properties(dmtx PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+  #set_target_properties(dmtx PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
 else()
   set_target_properties(dmtx PROPERTIES
                                 VERSION ${PROJECT_VERSION}
