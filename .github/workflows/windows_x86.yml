@@ -1,0 +1,29 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - windows
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up CMake
+        uses: microsoft/vcpkg-setup@v1
+
+      - name: Build DLL
+        run: |
+          mkdir build
+          cmake -A Win32 -DBUILD_SHARED_LIBS=ON -DDMTX_SHARED=ON -DBUILD_TESTING=OFF -DCMAKE_CXX_FLAGS_RELEASE="/MT /O2 /Ob2 /DNDEBUG" -DCMAKE_C_FLAGS_RELEASE="/MT /O2 /Ob2 /DNDEBUG" . -B build
+          cmake --build build --config Release
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows-x86
+          path: build/Release
